@@ -76,46 +76,255 @@
 
     <script>
         const dayContents = {
-            1: { type: 'text', content: 'Bienvenue dans le calendrier 🎅' },
-            2: { type: 'text', content: 'Une belle journée d’hiver ❄️' },
-            3: { type: 'text', content: 'Un chocolat chaud ? ☕' },
-            4: { type: 'text', content: 'Souris, c’est Noël bientôt 🎁' }
+            1: { type: 'text', content: 'Bienvenue dans le calendrier de l\'avent ! Pleins de bonnes choses vous attendent durant ce beau mois de décembre. Soyez curieux, attentifs, joyeux et émerveillés par cette fête de fin d\'année. Soyez sages 🎅' }, // OK NE PAS TOUCHER
+            2: { type: 'image', content: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHp1djA0bDI3cHBoOWwwaWRrYXNlNXk5cm55YnF5bTFtNzY3bmx6OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LBAv3HJDl2WwU/giphy.gif' }, // OK NE PAS TOUCHER
+            3: { type: 'youtube', content: 'https://www.youtube.com/embed/BBJa32lCaaY' }, // OK NE PAS TOUCHER
+            4: { type: 'sudoku', difficulty: 'easy' },
+            5: { type: 'image', content: 'https://exemple.com/votre-image.jpg' },
+            6: { type: 'text', content: 'Saint Nicolas est passé ! 🎅' },
+            7: { type: 'youtube', content: 'https://www.youtube.com/embed/cxCfypz5yAo' },
+            8: { type: 'text', content: 'Le Père Noël prépare son traîneau 🛷' },
+            9: { type: 'youtube', content: 'https://www.youtube.com/embed/27JZMgLZjj0' }, // OK NE PAS TOUCHER
+            10: { type: 'video', content: 'https://exemple.com/votre-video.mp4' },
+            11: { type: 'text', content: 'L\'esprit de Noël est partout ! ✨' },
+            12: { type: 'text', content: 'Plus que deux semaines ! 🎊' },
+            13: { type: 'text', content: 'Les cadeaux sont en préparation 🎁' },
+            14: { type: 'text', content: 'Joyeuse mi-décembre ! 🌟' },
+            15: { type: 'text', content: 'Le compte à rebours est lancé ! ⏰' },
+            16: { type: 'text', content: 'Faites votre liste au Père Noël 📝' },
+            17: { type: 'text', content: 'Plus qu\'une semaine ! 🎉' },
+            18: { type: 'text', content: 'Les préparatifs s\'intensifient ! 🎀' },
+            19: { type: 'text', content: 'Presque là ! 🌠' },
+            20: { type: 'text', content: 'Dernière ligne droite ! 🎊' },
+            21: { type: 'text', content: 'C\'est bientôt la veille ! 🎅' },
+            22: { type: 'text', content: 'Plus que 3 jours avant noël ! 🎄' },
+            23: { type: 'text', content: 'Les jours approchent ! ' },
+			24: { type: 'youtube', content: 'https://www.youtube.com/embed/BFvzay3z4RE' } // OK NE PAS TOUCHER
+        };
+        // Grilles de Sudoku pré-configurées (facile)
+        const sudokuPuzzles = {
+            easy: {
+                puzzle: [
+                    [5,3,0,0,7,0,0,0,0],
+                    [6,0,0,1,9,5,0,0,0],
+                    [0,9,8,0,0,0,0,6,0],
+                    [8,0,0,0,6,0,0,0,3],
+                    [4,0,0,8,0,3,0,0,1],
+                    [7,0,0,0,2,0,0,0,6],
+                    [0,6,0,0,0,0,2,8,0],
+                    [0,0,0,4,1,9,0,0,5],
+                    [0,0,0,0,8,0,0,7,9]
+                ],
+                solution: [
+                    [5,3,4,6,7,8,9,1,2],
+                    [6,7,2,1,9,5,3,4,8],
+                    [1,9,8,3,4,2,5,6,7],
+                    [8,5,9,7,6,1,4,2,3],
+                    [4,2,6,8,5,3,7,9,1],
+                    [7,1,3,9,2,4,8,5,6],
+                    [9,6,1,5,3,7,2,8,4],
+                    [2,8,7,4,1,9,6,3,5],
+                    [3,4,5,2,8,6,1,7,9]
+                ]
+            }
         };
 
+        let currentSudoku = null;
+
+        // Créer les flocons de neige
+        function createSnowflakes() {
+            const snow = document.getElementById('snow');
+            for (let i = 0; i < 50; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.opacity = Math.random();
+                snow.appendChild(snowflake);
+            }
+        }
+		//---------------------------------------------PARTIE A METTRE POUR TESTER---------------------------------------------------------------
+        // Obtenir la date actuelle (pour tester, vous pouvez changer cette valeur)
         function getCurrentDay() {
             const now = new Date();
-            // Mode test : forcer à afficher toutes les cases
-            return 24;
+            // MODE TEST : décommentez la ligne suivante et changez le jour pour tester
+            return 25; // Simule le 10 décembre - changez ce chiffre pour tester d'autres jours
+            // return now.getMonth() === 11 ? now.getDate() : 0;
         }
-
+		//---------------------------------------------FIN DE LA PARTIE A METTRE POUR TESTER---------------------------------------------------------------
+        // Charger l'état sauvegardé
         const openedDays = JSON.parse(localStorage.getItem('adventOpenedDays') || '[]');
 
+        // Créer le calendrier
         function createCalendar() {
             const calendar = document.getElementById('calendar');
             const currentDay = getCurrentDay();
-            calendar.innerHTML = '';
-
+            
             for (let i = 1; i <= 24; i++) {
-                const box = document.createElement('div');
-                box.className = 'day-box';
+                const dayBox = document.createElement('div');
+                dayBox.className = 'day-box';
+                
                 const isLocked = i > currentDay;
                 const isOpened = openedDays.includes(i);
-
+                
                 if (isLocked) {
-                    box.classList.add('locked');
-                    box.innerHTML = `<div class='day-number'>${i}</div>`;
+                    dayBox.classList.add('locked');
+                    dayBox.innerHTML = `
+                        <div class="day-number">${i}</div>
+                        <div class="lock-icon">🔒</div>
+                    `;
                 } else if (isOpened) {
-                    box.classList.add('opened');
-                    box.innerHTML = `<div class='opened-content'>🎁</div>`;
+                    dayBox.classList.add('opened');
+                    dayBox.innerHTML = `
+                        <div class="opened-content">🎁</div>
+                    `;
                 } else {
-                    box.innerHTML = `<div class='day-number'>${i}</div>`;
+                    dayBox.innerHTML = `<div class="day-number">${i}</div>`;
                 }
-
-                if (!isLocked) box.onclick = () => openDay(i, box);
-                calendar.appendChild(box);
+                
+                if (!isLocked) {
+                    dayBox.onclick = () => openDay(i, dayBox);
+                }
+                
+                calendar.appendChild(dayBox);
             }
         }
 
+        // Créer le Sudoku
+        function createSudoku(difficulty) {
+            const puzzle = sudokuPuzzles[difficulty];
+            currentSudoku = {
+                puzzle: puzzle.puzzle,
+                solution: puzzle.solution,
+                userGrid: puzzle.puzzle.map(row => [...row])
+            };
+
+            let html = '<div class="sudoku-container">';
+            html += '<h2>🎄 Sudoku de Noël - Niveau Facile 🎄</h2>';
+            html += '<p style="color: #3a2a1a; margin-bottom: 15px;">Remplissez la grille avec les chiffres de 1 à 9</p>';
+            html += '<div class="sudoku-grid">';
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const value = puzzle.puzzle[row][col];
+                    const isFixed = value !== 0;
+                    
+                    html += `<input type="text" 
+                        class="sudoku-cell" 
+                        id="cell-${row}-${col}"
+                        maxlength="1"
+                        ${isFixed ? 'disabled' : ''}
+                        value="${isFixed ? value : ''}"
+                        data-row="${row}"
+                        data-col="${col}"
+                        onkeypress="return /[1-9]/.test(event.key)"
+                        oninput="updateSudokuCell(${row}, ${col}, this.value)">`;
+                }
+            }
+
+            html += '</div>';
+            html += '<div class="sudoku-buttons">';
+            html += '<button class="sudoku-btn" onclick="checkSudoku()">Vérifier</button>';
+            html += '<button class="sudoku-btn" onclick="resetSudoku()">Recommencer</button>';
+            html += '<button class="sudoku-btn" onclick="solveSudoku()">Solution</button>';
+            html += '</div>';
+            html += '<div class="sudoku-message" id="sudokuMessage"></div>';
+            html += '</div>';
+
+            return html;
+        }
+
+        // Mettre à jour une cellule
+        function updateSudokuCell(row, col, value) {
+            if (currentSudoku) {
+                currentSudoku.userGrid[row][col] = value ? parseInt(value) : 0;
+            }
+        }
+
+        // Vérifier le Sudoku
+        function checkSudoku() {
+            if (!currentSudoku) return;
+
+            let correct = true;
+            let complete = true;
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const cell = document.getElementById(`cell-${row}-${col}`);
+                    if (cell.disabled) continue;
+
+                    const userValue = currentSudoku.userGrid[row][col];
+                    const correctValue = currentSudoku.solution[row][col];
+
+                    if (userValue === 0) {
+                        complete = false;
+                        cell.classList.remove('error', 'correct');
+                    } else if (userValue === correctValue) {
+                        cell.classList.remove('error');
+                        cell.classList.add('correct');
+                    } else {
+                        cell.classList.remove('correct');
+                        cell.classList.add('error');
+                        correct = false;
+                    }
+                }
+            }
+
+            const message = document.getElementById('sudokuMessage');
+            if (complete && correct) {
+                message.textContent = '🎉 Bravo ! Vous avez résolu le Sudoku ! 🎉';
+                message.className = 'sudoku-message success';
+            } else if (!complete) {
+                message.textContent = 'Il reste des cases à remplir...';
+                message.className = 'sudoku-message';
+            } else {
+                message.textContent = 'Il y a des erreurs. Réessayez !';
+                message.className = 'sudoku-message error';
+            }
+        }
+
+        // Recommencer le Sudoku
+        function resetSudoku() {
+            if (!currentSudoku) return;
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const cell = document.getElementById(`cell-${row}-${col}`);
+                    if (!cell.disabled) {
+                        cell.value = '';
+                        cell.classList.remove('error', 'correct');
+                        currentSudoku.userGrid[row][col] = 0;
+                    }
+                }
+            }
+
+            const message = document.getElementById('sudokuMessage');
+            message.textContent = '';
+            message.className = 'sudoku-message';
+        }
+
+        // Afficher la solution
+        function solveSudoku() {
+            if (!currentSudoku) return;
+
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const cell = document.getElementById(`cell-${row}-${col}`);
+                    if (!cell.disabled) {
+                        cell.value = currentSudoku.solution[row][col];
+                        cell.classList.remove('error');
+                        cell.classList.add('correct');
+                        currentSudoku.userGrid[row][col] = currentSudoku.solution[row][col];
+                    }
+                }
+            }
+
+            const message = document.getElementById('sudokuMessage');
+            message.textContent = '✨ Voici la solution complète ! ✨';
+            message.className = 'sudoku-message success';
+        }
         function openDay(day, element) {
             const modal = document.getElementById('modal');
             const modalBody = document.getElementById('modalBody');
