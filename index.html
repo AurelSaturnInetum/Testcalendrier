@@ -477,13 +477,14 @@
                 snow.appendChild(snowflake);
             }
         }
-		//---------------------------------------------PARTIE A METTRE POUR TESTER---------------------------------------------------------------
-        // Obtenir la date actuelle (pour tester, vous pouvez changer cette valeur)
-        function getCurrentDay() {
-			const now = new Date();
-			return 24; // Teste le 24 décembre
+				// ---------------------------------------------PARTIE A METTRE POUR TESTER---------------------------------------------------------------
+		function getCurrentDay() {
+		    // MODE TEST : décommente la ligne suivante et change le jour pour tester
+  		  return 10; // Simule le 10 décembre - change ce chiffre pour tester d'autres jours
+ 		   // return now.getMonth() === 11 ? now.getDate() : 0;
 		}
-		//---------------------------------------------FIN DE LA PARTIE A METTRE POUR TESTER---------------------------------------------------------------
+				// ---------------------------------------------FIN DE LA PARTIE A METTRE POUR TESTER---------------------------------------------------------------
+
         // Charger l'état sauvegardé
         const openedDays = JSON.parse(localStorage.getItem('adventOpenedDays') || '[]');
 
