@@ -815,17 +815,16 @@
 				});
 				treeZone.addEventListener('drop', e => {
 					e.preventDefault();
-					const src = e.dataTransfer.getData('text/plain');
-					const img = document.createElement('img');
-					img.src = src;
-					img.className = 'placed';
-					img.style.position = 'absolute';
+					const emoji = e.dataTransfer.getData('text/plain');
+					const span = document.createElement('span');
+					span.textContent = emoji;
+					span.className = 'placed';
+					span.style.position = 'absolute';
 					const rect = treeZone.getBoundingClientRect();
-					img.style.left = (e.clientX - rect.left - 25) + 'px';
-					img.style.top = (e.clientY - rect.top - 25) + 'px';
-					img.style.width = '50px';
-					img.style.height = '50px';
-					treeZone.appendChild(img);
+					span.style.left = (e.clientX - rect.left - 25) + 'px';
+					span.style.top = (e.clientY - rect.top - 25) + 'px';
+					span.style.fontSize = '35px';
+					treeZone.appendChild(span);
 				});
 			} else {
 				modalBody.innerHTML = `<div class="parchment"><h2>Jour ${day}</h2><p>Type de contenu non reconnu: ${content.type}</p></div>`;
