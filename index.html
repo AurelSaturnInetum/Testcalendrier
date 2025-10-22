@@ -478,11 +478,11 @@
             }
         }
 				// ---------------------------------------------PARTIE A METTRE POUR TESTER---------------------------------------------------------------
-		function getCurrentDay() {
-		    // MODE TEST : décommente la ligne suivante et change le jour pour tester
-  		  return 10; // Simule le 10 décembre - change ce chiffre pour tester d'autres jours
- 		   // return now.getMonth() === 11 ? now.getDate() : 0;
-		}
+			function getCurrentDay() {
+				const now = new Date(); // ⚠️ Cette ligne était manquante !
+				// MODE TEST : commente les 2 lignes suivantes pour tester un jour spécifique
+				return now.getMonth() === 11 ? now.getDate() : 0;
+			}
 				// ---------------------------------------------FIN DE LA PARTIE A METTRE POUR TESTER---------------------------------------------------------------
 
         // Charger l'état sauvegardé
