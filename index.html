@@ -718,14 +718,34 @@
 					</div>
 				`;
 
+				// Utilisation de fréquences pour créer des sons de cloche synthétiques
+				const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+	
+				function playBellNote(frequency) {
+					const oscillator = audioContext.createOscillator();
+					const gainNode = audioContext.createGain();
+		
+					oscillator.connect(gainNode);
+					gainNode.connect(audioContext.destination);
+		
+					oscillator.type = 'sine';
+					oscillator.frequency.value = frequency;
+		
+					gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+					gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+		
+					oscillator.start(audioContext.currentTime);
+					oscillator.stop(audioContext.currentTime + 1);
+				}
+	
 				const notes = {
-					C: new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'),
-					D: new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg'),
-					E: new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg'),
-					F: new Audio('https://actions.google.com/sounds/v1/cartoon/concussive_hit_guitar_boing.ogg'),
-					G: new Audio('https://actions.google.com/sounds/v1/cartoon/slide_whistle_to_drum_hit.ogg'),
-					A: new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg'),
-					B: new Audio('https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg')
+					C: 261.63,  // Do
+					D: 293.66,  // Ré
+					E: 329.63,  // Mi
+					F: 349.23,  // Fa
+					G: 392.00,  // Sol
+					A: 440.00,  // La
+					B: 493.88   // Si
 				};
 
 				const sequence = ['E', 'E', 'E', 'E', 'E', 'E', 'E', 'G', 'C', 'D', 'E']; // Jingle Bells (simplifiée)
@@ -734,8 +754,7 @@
 				document.querySelectorAll('.bell').forEach(bell => {
 					bell.addEventListener('click', () => {
 						const note = bell.dataset.note;
-						notes[note].currentTime = 0;
-						notes[note].play();
+						playBellNote(notes[note]);
 						bell.classList.add('active');
 						setTimeout(() => bell.classList.remove('active'), 200);
 
@@ -747,7 +766,7 @@
 							if (correct) {
 								msg.textContent = '🎶 Bravo ! Tu as rejoué "Jingle Bells" ! 🎅';
 							} else {
-								msg.textContent = '😅 Essaie encore, les cloches n’étaient pas dans le bon ordre !';
+								msg.textContent = '😅 Essaie encore, les cloches n'étaient pas dans le bon ordre !';
 							}
 							userSequence = [];
 						}
@@ -770,23 +789,53 @@
 					</div>
 				`;
 
+			} else if (content.type === 'decorate') {
+				modalBody.innerHTML = `
+					<div class="decorate-container">
+						<h2 style="color:#ffd700; text-align:center; margin-bottom:20px;">🎄 Décore ton sapin 🎄</h2>
+						<div class="tree-zone">
+							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Christmas_tree_icon_1.svg/512px-Christmas_tree_icon_1.svg.png" 
+								id="tree" alt="Sapin" draggable="false">
+						</div>
+						<div class="ornaments">
+							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Christmas_ball_icon.svg/64px-Christmas_ball_icon.svg.png" draggable="true" class="ornament">
+							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Christmas_star_icon.svg/64px-Christmas_star_icon.svg.png" draggable="true" class="ornament">
+							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Gift_icon.svg/64px-Gift_icon.svg.png" draggable="true" class="ornament">
+							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Bell_icon.svg/64px-Bell_icon.svg.png" draggable="true" class="ornament">
+						</div>
+					</div>
+				`;
+
 				const treeZone = document.querySelector('.tree-zone');
-				document.querySelectorAll('.ornament').forEach(orn => {
+				const ornaments = document.querySelectorAll('.ornament');
+	
+				ornaments.forEach(orn => {
 					orn.addEventListener('dragstart', e => {
-						e.dataTransfer.setData('src', e.target.src);
+						e.dataTransfer.effectAllowed = 'copy';
+						e.dataTransfer.setData('text/plain', e.target.src);
 					});
 				});
 
-				treeZone.addEventListener('dragover', e => e.preventDefault());
+				treeZone.addEventListener('dragover', e => {
+					e.preventDefault();
+					e.dataTransfer.dropEffect = 'copy';
+				});
+	
 				treeZone.addEventListener('drop', e => {
 					e.preventDefault();
-					const src = e.dataTransfer.getData('src');
+					const src = e.dataTransfer.getData('text/plain');
 					const img = document.createElement('img');
 					img.src = src;
 					img.className = 'placed';
 					img.style.position = 'absolute';
-					img.style.left = (e.offsetX - 25) + 'px';
-					img.style.top = (e.offsetY - 25) + 'px';
+		
+					// Calcul de la position relative au tree-zone
+					const rect = treeZone.getBoundingClientRect();
+					const x = e.clientX - rect.left - 25;
+					const y = e.clientY - rect.top - 25;
+		
+					img.style.left = x + 'px';
+					img.style.top = y + 'px';
 					img.style.width = '50px';
 					img.style.height = '50px';
 					treeZone.appendChild(img);
