@@ -789,23 +789,6 @@
 					</div>
 				`;
 
-			} else if (content.type === 'decorate') {
-				modalBody.innerHTML = `
-					<div class="decorate-container">
-						<h2 style="color:#ffd700; text-align:center; margin-bottom:20px;">🎄 Décore ton sapin 🎄</h2>
-						<div class="tree-zone">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Christmas_tree_icon_1.svg/512px-Christmas_tree_icon_1.svg.png" 
-								id="tree" alt="Sapin" draggable="false">
-						</div>
-						<div class="ornaments">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Christmas_ball_icon.svg/64px-Christmas_ball_icon.svg.png" draggable="true" class="ornament">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Christmas_star_icon.svg/64px-Christmas_star_icon.svg.png" draggable="true" class="ornament">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Gift_icon.svg/64px-Gift_icon.svg.png" draggable="true" class="ornament">
-							<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Bell_icon.svg/64px-Bell_icon.svg.png" draggable="true" class="ornament">
-						</div>
-					</div>
-				`;
-
 				const treeZone = document.querySelector('.tree-zone');
 				const ornaments = document.querySelectorAll('.ornament');
 	
