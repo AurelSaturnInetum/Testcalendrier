@@ -791,19 +791,16 @@
 
 				const treeZone = document.querySelector('.tree-zone');
 				const ornaments = document.querySelectorAll('.ornament');
-	
 				ornaments.forEach(orn => {
 					orn.addEventListener('dragstart', e => {
 						e.dataTransfer.effectAllowed = 'copy';
 						e.dataTransfer.setData('text/plain', e.target.src);
 					});
 				});
-
 				treeZone.addEventListener('dragover', e => {
 					e.preventDefault();
 					e.dataTransfer.dropEffect = 'copy';
 				});
-	
 				treeZone.addEventListener('drop', e => {
 					e.preventDefault();
 					const src = e.dataTransfer.getData('text/plain');
@@ -811,14 +808,9 @@
 					img.src = src;
 					img.className = 'placed';
 					img.style.position = 'absolute';
-		
-					// Calcul de la position relative au tree-zone
 					const rect = treeZone.getBoundingClientRect();
-					const x = e.clientX - rect.left - 25;
-					const y = e.clientY - rect.top - 25;
-		
-					img.style.left = x + 'px';
-					img.style.top = y + 'px';
+					img.style.left = (e.clientX - rect.left - 25) + 'px';
+					img.style.top = (e.clientY - rect.top - 25) + 'px';
 					img.style.width = '50px';
 					img.style.height = '50px';
 					treeZone.appendChild(img);
