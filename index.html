@@ -480,11 +480,9 @@
 		//---------------------------------------------PARTIE A METTRE POUR TESTER---------------------------------------------------------------
         // Obtenir la date actuelle (pour tester, vous pouvez changer cette valeur)
         function getCurrentDay() {
-            const now = new Date();
-            // MODE TEST : décommentez la ligne suivante et changez le jour pour tester
-            return 24; // Simule le 10 décembre - changez ce chiffre pour tester d'autres jours
-            // return now.getMonth() === 11 ? now.getDate() : 0;
-        }
+			const now = new Date();
+			return 24; // Teste le 24 décembre
+		}
 		//---------------------------------------------FIN DE LA PARTIE A METTRE POUR TESTER---------------------------------------------------------------
         // Charger l'état sauvegardé
         const openedDays = JSON.parse(localStorage.getItem('adventOpenedDays') || '[]');
