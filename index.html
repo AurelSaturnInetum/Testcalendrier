@@ -806,8 +806,8 @@
 				ornaments.forEach(orn => {
 					orn.addEventListener('dragstart', e => {
 						e.dataTransfer.effectAllowed = 'copy';
-						e.dataTransfer.setData('text/plain', e.target.src);
-					});
+						e.dataTransfer.setData('text/plain', e.target.dataset.emoji);
+				});
 				});
 				treeZone.addEventListener('dragover', e => {
 					e.preventDefault();
