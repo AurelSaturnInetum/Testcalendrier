@@ -350,6 +350,43 @@
 			background: radial-gradient(circle, #fff9c4 40%, #ffd700 100%);
 			transform: scale(1.2);
 		}
+		.decorate-container {
+			text-align: center;
+			color: white;
+		}
+		.tree-zone {
+			position: relative;
+			display: inline-block;
+			background: radial-gradient(circle, #004400 0%, #002200 100%);
+			border: 4px solid #ffd700;
+			border-radius: 20px;
+			width: 300px;
+			height: 400px;
+			overflow: hidden;
+			margin: 0 auto;
+		}
+		.tree-zone img#tree {
+			width: 100%;
+			height: auto;
+			pointer-events: none;
+		}
+		.ornaments {
+			margin-top: 20px;
+			display: flex;
+			justify-content: center;
+			gap: 15px;
+		}
+		.ornament {
+			cursor: grab;
+			transition: transform 0.2s;
+		}
+		.ornament:hover {
+			transform: scale(1.2);
+		}
+		.placed {
+			pointer-events: none;
+			user-select: none;
+		}
     </style>
 </head>
 <body>
@@ -716,6 +753,45 @@
             }
         });
     });
+	        }else if (content.type === 'decorate') {
+    modalBody.innerHTML = `
+        <div class="decorate-container">
+            <h2 style="color:#ffd700; text-align:center; margin-bottom:20px;">🎄 Décore ton sapin 🎄</h2>
+            <div class="tree-zone">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Christmas_tree_icon_1.svg/512px-Christmas_tree_icon_1.svg.png" 
+                     id="tree" alt="Sapin" draggable="false">
+            </div>
+            <div class="ornaments">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Christmas_ball_icon.svg/64px-Christmas_ball_icon.svg.png" draggable="true" class="ornament">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Christmas_star_icon.svg/64px-Christmas_star_icon.svg.png" draggable="true" class="ornament">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Gift_icon.svg/64px-Gift_icon.svg.png" draggable="true" class="ornament">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Bell_icon.svg/64px-Bell_icon.svg.png" draggable="true" class="ornament">
+            </div>
+        </div>
+    `;
+
+    const treeZone = document.querySelector('.tree-zone');
+    document.querySelectorAll('.ornament').forEach(orn => {
+        orn.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('src', e.target.src);
+        });
+    });
+
+    treeZone.addEventListener('dragover', e => e.preventDefault());
+    treeZone.addEventListener('drop', e => {
+        e.preventDefault();
+        const src = e.dataTransfer.getData('src');
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'placed';
+        img.style.position = 'absolute';
+        img.style.left = (e.offsetX - 25) + 'px';
+        img.style.top = (e.offsetY - 25) + 'px';
+        img.style.width = '50px';
+        img.style.height = '50px';
+        treeZone.appendChild(img);
+    });
+}
 			} else {
 				modalBody.innerHTML = `<div class="parchment"><h2>Jour ${day}</h2><p>Type de contenu non reconnu: ${content.type}</p></div>`;
 			}
