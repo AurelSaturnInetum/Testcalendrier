@@ -426,7 +426,7 @@
             17: { type: 'text', content: 'Plus qu\'une semaine ! 🎉' },
             18: { type: 'text', content: 'Les préparatifs s\'intensifient ! 🎀' },
             19: { type: 'text', content: 'Presque là ! 🌠' },
-            20: { type: 'decorate' }, // OK NE PAS TOUCHER
+            20: { type: 'decorate' },
             21: { type: 'text', content: 'C\'est bientôt la veille ! 🎅' },
             22: { type: 'text', content: 'Plus que 3 jours avant noël ! 🎄' },
             23: { type: 'text', content: 'Les jours approchent ! ' },
@@ -758,6 +758,13 @@
 				document.querySelectorAll('.bell').forEach(bell => {
 					bell.addEventListener('click', () => {
 						const note = bell.dataset.note;
+						const msg = document.getElementById('bellMessage');
+
+						// 🔄 Efface le message dès qu'une nouvelle tentative commence
+						if (userSequence.length === 0) {
+							msg.textContent = '';
+						}
+
 						playBellNote(notes[note]);
 						bell.classList.add('active');
 						setTimeout(() => bell.classList.remove('active'), 200);
@@ -766,7 +773,6 @@
 
 						if (userSequence.length === sequence.length) {
 							const correct = sequence.every((n, i) => n === userSequence[i]);
-							const msg = document.getElementById('bellMessage');
 							if (correct) {
 								msg.textContent = '🎶 Bravo ! Tu as rejoué "Jingle Bells" ! 🎅';
 							} else {
