@@ -411,7 +411,11 @@
             2: { type: 'image', content: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHp1djA0bDI3cHBoOWwwaWRrYXNlNXk5cm55YnF5bTFtNzY3bmx6OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LBAv3HJDl2WwU/giphy.gif' }, // OK NE PAS TOUCHER
             3: { type: 'youtube', content: 'https://www.youtube.com/embed/BBJa32lCaaY' }, // OK NE PAS TOUCHER
             4: { type: 'sudoku', difficulty: 'easy' }, // OK NE PAS TOUCHER
-            5: { type: 'image', content: 'https://blogvoyages.fr/wp-content/uploads/2020/11/strasbourg_1551479018.jpg' },
+            5: { 
+				type: 'image', 
+				content: 'https://blogvoyages.fr/wp-content/uploads/2020/11/strasbourg_1551479018.jpg',
+				caption: 'Les magnifiques marchés de Noël de Strasbourg 🎄✨'
+			}, // OK NE PAS TOUCHER
             6: { type: 'bells' }, // OK NE PAS TOUCHER
             7: { 
 				type: 'text', 
@@ -739,7 +743,12 @@
 			} else if (content.type === 'text') {
 				modalBody.innerHTML = `<div class="parchment"><h2>Jour ${day}</h2><p>${content.content}</p></div>`;
 			} else if (content.type === 'image') {
-				modalBody.innerHTML = `<h2 style="color: #ffd700; margin-bottom: 20px;">Jour ${day}</h2><img src="${content.content}" alt="Image du jour ${day}">`;
+				const captionHtml = content.caption ? `<p style="color: #ffd700; margin-top: 15px; text-align: center; font-size: 1.2em;">${content.caption}</p>` : '';
+				modalBody.innerHTML = `
+					<h2 style="color: #ffd700; margin-bottom: 20px;">Jour ${day}</h2>
+					<img src="${content.content}" alt="Image du jour ${day}">
+					${captionHtml}
+				`;
 			} else if (content.type === 'video') {
 				modalBody.innerHTML = `<h2 style="color: #ffd700; margin-bottom: 20px;">Jour ${day}</h2><video controls autoplay><source src="${content.content}" type="video/mp4"></video>`;
 			} else if (content.type === 'youtube') {
