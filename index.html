@@ -387,6 +387,10 @@
 		    pointer-events: none;
 		    user-select: none;
 		}
+		.day-box:nth-child(25) {
+			grid-column: span 2;
+			background: linear-gradient(145deg, #FFD700, #FFA500);
+		}
     </style>
 </head>
 <body>
@@ -778,8 +782,23 @@
 					</div>
 				` 
 			}, // OK NE PAS TOUCHER
-			24: { type: 'youtube', content: 'https://www.youtube.com/embed/BFvzay3z4RE' } // OK NE PAS TOUCHER
-        };
+			24: { type: 'youtube', content: 'https://www.youtube.com/embed/BFvzay3z4RE' }, // OK NE PAS TOUCHER
+			25: { 
+				type: 'text', 
+				content: `
+					<h2 style="text-align: center; margin-bottom: 20px;">🎅 Joyeux Noël ! 🎄</h2>
+					<div style="text-align: center; font-size: 1.2em; line-height: 1.8;">
+						<p>Je vous souhaite un merveilleux Noël !</p>
+						<p>Que cette journée soit remplie de joie, de bonheur et de moments précieux avec vos proches.</p>
+						<p>✨ Profitez bien de cette belle fête ! ✨</p>
+						<br>
+						<img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG01Z2FweHg3MWJpNjRrczBpZ2Fzb2l1dDFzeDJtNGMwMXl5bHkydSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/n6WriOzunSG6jslFUC/giphy.gif" 
+							alt="Joyeux Noël" 
+							style="margin-top: 20px; max-width: 100%; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.4);">
+					</div>
+				` 
+			}
+			};
 
         // Grilles de Sudoku pré-configurées (facile)
         const sudokuPuzzles = {
@@ -842,7 +861,7 @@
             const calendar = document.getElementById('calendar');
             const currentDay = getCurrentDay();
             
-            for (let i = 1; i <= 24; i++) {
+            for (let i = 1; i <= 25; i++) {
                 const dayBox = document.createElement('div');
                 dayBox.className = 'day-box';
                 
