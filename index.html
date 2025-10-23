@@ -519,7 +519,12 @@
 					</div>
 				` 
 			}, // OK NE PAS TOUCHER
-            12: { 
+            12: { type: 'text', content: 'Des petits gâteaux de Noël sont cachés derrière la télévision de la salle de réunion🍰' }, // OK NE PAS TOUCHER
+            13: { type: 'text', content: 'Les cadeaux sont en préparation 🎁' },
+            14: { type: 'text', content: 'Joyeuse mi-décembre ! 🌟' },
+            15: { type: 'text', content: 'Le compte à rebours est lancé ! ⏰' },
+            16: { type: 'text', content: 'Faites votre liste au Père Noël 📝' },
+            17: { 
 				type: 'text', 
 				content: `
 					<div style="text-align: center;">
@@ -560,11 +565,6 @@
 					</div>
 				` 
 			},
-            13: { type: 'text', content: 'Les cadeaux sont en préparation 🎁' },
-            14: { type: 'text', content: 'Joyeuse mi-décembre ! 🌟' },
-            15: { type: 'text', content: 'Le compte à rebours est lancé ! ⏰' },
-            16: { type: 'text', content: 'Faites votre liste au Père Noël 📝' },
-            17: { type: 'text', content: 'Des petits gâteaux de Noël sont cachés derrière la télévision de la salle de réunion🍰' }, // OK NE PAS TOUCHER
             18: { type: 'text', content: 'Les préparatifs s\'intensifient ! 🎀' },
             19: { 
 				type: 'text', 
@@ -1130,7 +1130,7 @@
 			modal.style.display = 'block';
 		}
 		
-		// Fonction pour vérifier le message secret du jour 12
+		// Fonction pour vérifier le message secret du jour 17
 				window.checkSecretMessage = function() {
 					const input = document.getElementById('decoder').value.toLowerCase().trim();
 					const solution = "des petits gâteaux de noël sont cachés derrière la télévision de la salle de réunion";
