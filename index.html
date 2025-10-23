@@ -519,7 +519,47 @@
 					</div>
 				` 
 			}, // OK NE PAS TOUCHER
-            12: { type: 'text', content: 'Plus que deux semaines ! 🎊' },
+            12: { 
+				type: 'text', 
+				content: `
+					<div style="text-align: center;">
+						<h2>🔐 Message Secret de Noël 🔐</h2>
+						<p style="margin: 20px 0; font-size: 1.1em;">Déchiffre ce message pour découvrir une surprise !</p>
+            
+						<div style="background: #2a1a0a; padding: 20px; border-radius: 10px; margin: 20px 0;">
+							<p style="font-family: 'Courier New', monospace; font-size: 1.2em; color: #ffd700; letter-spacing: 2px; line-height: 1.8;">
+								Ahv shwlwv jdwhdxa<br>
+								gh Qrhö vrqw fdfkhv<br>
+								ghuulhuh od whohylvlrq<br>
+								gh od vdooh gh uhxqlrq
+							</p>
+						</div>
+            
+						<div style="background: #f4e4c1; color: #3a2a1a; padding: 20px; border-radius: 10px; margin: 20px 0;">
+							<h3 style="margin-bottom: 15px;">🔑 Indice : Chiffre de César</h3>
+							<p style="margin-bottom: 10px;">Chaque lettre a été décalée dans l'alphabet.</p>
+							<p style="font-size: 0.9em; font-style: italic;">Exemple : A → D, B → E, C → F...</p>
+                
+							<div style="margin-top: 20px;">
+								<label for="decoder" style="display: block; margin-bottom: 10px; font-weight: bold;">Tape ta réponse :</label>
+								<input type="text" id="decoder" placeholder="Écris le message décodé..." 
+									style="width: 100%; padding: 10px; border: 2px solid #8B0000; border-radius: 5px; font-size: 1em;">
+								<button onclick="window.checkSecretMessage()" 
+										style="margin-top: 15px; background: #8B0000; color: #ffd700; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold;">
+									Vérifier
+								</button>
+								<div id="secretResult" style="margin-top: 15px; font-weight: bold; font-size: 1.1em;"></div>
+							</div>
+						</div>
+            
+						<details style="margin-top: 20px; background: #2a1a0a; padding: 15px; border-radius: 10px;">
+							<summary style="cursor: pointer; color: #ffd700; font-weight: bold;">💡 Besoin d'aide ?</summary>
+							<p style="margin-top: 10px; color: white;">Remplace chaque lettre par celle qui est 3 positions avant ou après dans l'alphabet.<br>
+							Par exemple : Le A est un D, le E est un H...</p>
+						</details>
+					</div>
+				` 
+			},
             13: { type: 'text', content: 'Les cadeaux sont en préparation 🎁' },
             14: { type: 'text', content: 'Joyeuse mi-décembre ! 🌟' },
             15: { type: 'text', content: 'Le compte à rebours est lancé ! ⏰' },
@@ -1089,6 +1129,33 @@
         
 			modal.style.display = 'block';
 		}
+		
+		// Fonction pour vérifier le message secret du jour 12
+				window.checkSecretMessage = function() {
+					const input = document.getElementById('decoder').value.toLowerCase().trim();
+					const solution = "des petits gâteaux de noël sont cachés derrière la télévision de la salle de réunion";
+					const result = document.getElementById('secretResult');
+    
+				// Normaliser les accents pour la comparaison
+					const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]/g, '');
+
+					if (normalize(input) === normalize(solution)) {
+						result.innerHTML = '🎉 Bravo ! Tu as décodé le message ! Cours vite chercher ta surprise ! 🍪✨';
+						result.style.color = '#2d5016';
+					} else if (input.length > 10) {
+						result.innerHTML = '❌ Pas tout à fait... Réessaye ! Vérifie bien chaque lettre.';
+						result.style.color = '#8B0000';
+					} else {
+						result.innerHTML = '';
+					}
+				}
+
+				// Permettre de valider avec la touche Entrée
+				document.addEventListener('keypress', function(e) {
+					if (e.key === 'Enter' && document.getElementById('decoder')) {
+						window.checkSecretMessage();
+					}
+				});
 
         // Fermer la modal
         function closeModal() {
