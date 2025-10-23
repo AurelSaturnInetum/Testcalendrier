@@ -582,7 +582,29 @@
 				content: 'https://santaclausvillage.info/wp-content/uploads/2023/06/hero-winter-1280x688.jpg',
 				caption: '🎅🏻 Le village du père noël en Laponie à Rovaniemi 🤶🏻'
 			}, // OK NE PAS TOUCHER
-            16: { type: 'text', content: 'Faites votre liste au Père Noël 📝' },
+            16: { 
+				type: 'text', 
+				content: `
+					<div style="text-align: center;">
+						<h2>🎅 Quiz de Noël 🎄</h2>
+						<p style="margin: 20px 0; font-size: 1.1em;">Teste tes connaissances sur Noël !</p>
+            
+						<div id="quizContainer" style="background: #f4e4c1; color: #3a2a1a; padding: 30px; border-radius: 10px; margin: 20px 0;">
+							<div id="question" style="font-size: 1.3em; font-weight: bold; margin-bottom: 25px;"></div>
+							<div id="answers" style="display: flex; flex-direction: column; gap: 15px;"></div>
+							<div id="quizResult" style="margin-top: 25px; font-weight: bold; font-size: 1.2em; min-height: 30px;"></div>
+							<button id="nextBtn" style="display: none; margin-top: 20px; background: #8B0000; color: #ffd700; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold;">
+								Question suivante
+							</button>
+						</div>
+            
+						<div id="finalScore" style="display: none; background: #2a1a0a; color: #ffd700; padding: 30px; border-radius: 10px; margin: 20px 0;">
+							<h3 style="font-size: 2em; margin-bottom: 20px;">🎉 Quiz terminé ! 🎉</h3>
+							<p id="scoreText" style="font-size: 1.5em;"></p>
+						</div>
+					</div>
+				` 
+			},
             17: { 
 				type: 'text', 
 				content: `
@@ -1182,12 +1204,145 @@
 					span.style.fontSize = '35px';
 					treeZone.appendChild(span);
 				});
-			} else {
-				modalBody.innerHTML = `<div class="parchment"><h2>Jour ${day}</h2><p>Type de contenu non reconnu: ${content.type}</p></div>`;
 			}
+			
+			// Gestion spéciale pour le quiz du jour 16
+			if (day === 16) {
+					// Gestion spéciale pour le quiz du jour 16
+					modalBody.innerHTML = content.content;
+    
+					setTimeout(() => {
+						const questions = [
+							{
+								question: "1. Quel est l'ingrédient principal du pain au chocolat?",
+								answers: ["Le chocolat", "Le gruyère", "La fraise", "Les amandes"],
+								correct: 0
+							},
+							{
+								question: "2. Selon les légendes, quelle était la première couleur du costume du père noël en Angleterre?",
+								answers: ["En rouge et blanc", "En jaune ou en bleu", "En rouge et noir,, j'exilerai ma peur ;J'irai plus haut que ces montagnes de douleur.... (Merci Jeanne MAS)", "En vert ou en brun"],
+								correct: 3
+							},
+							{
+								question: "3. Quelle parole figure dans la chanson de Rick ASTLEY?",
+								answers: ["Never gonna give you up", "Never gonna let you down", "Never gonna run around and desert you", "Toutes (et maintenant, j'ai la chanson dans la tête 😡)"],
+								correct: 3
+							},
+							{
+								question: "4. Combien de rennes tirent le traineau du père noël?",
+								answers: ["7", "8", "9", "12 754"],
+								correct: 2
+							},
+							{
+								question: "5. Qui est le meilleur parmi les personnes suivantes:",
+								answers: ["David", "David", "David", "David"],
+								correct: -1, // Pas de bonne réponse!
+								trollMessage: "Bande de coquins, bien tenté(e)s.... La bonne réponse était Chuck Norris"
+							}
+						];
         
-			modal.style.display = 'block';
-		}
+						let currentQuestion = 0;
+						let score = 0;
+						let answered = false;
+        
+						const questionEl = document.getElementById('question');
+						const answersEl = document.getElementById('answers');
+						const resultEl = document.getElementById('quizResult');
+						const nextBtn = document.getElementById('nextBtn');
+						const finalScoreEl = document.getElementById('finalScore');
+						const scoreTextEl = document.getElementById('scoreText');
+        
+						function loadQuestion() {
+							answered = false;
+							resultEl.innerHTML = '';
+							nextBtn.style.display = 'none';
+            
+							const q = questions[currentQuestion];
+							questionEl.textContent = q.question;
+							answersEl.innerHTML = '';
+            
+							q.answers.forEach((answer, index) => {
+								const button = document.createElement('button');
+								button.textContent = answer;
+								button.style.cssText = 'background: white; color: #3a2a1a; border: 2px solid #8B0000; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 1.1em; transition: all 0.3s;';
+                
+								button.onmouseover = () => {
+									if (!answered) button.style.background = '#ffeecc';
+								};
+								button.onmouseout = () => {
+									if (!answered) button.style.background = 'white';
+								};
+                
+								button.onclick = () => checkAnswer(index, button);
+								answersEl.appendChild(button);
+							});
+						}
+        
+						function checkAnswer(selected, button) {
+							if (answered) return;
+							answered = true;
+            
+							const q = questions[currentQuestion];
+							const buttons = answersEl.querySelectorAll('button');
+            
+							// Question 5 : troll
+							if (currentQuestion === 4) {
+								button.style.background = '#ffcccc';
+								button.style.borderColor = '#cc0000';
+								resultEl.innerHTML = q.trollMessage;
+								resultEl.style.color = '#8B0000';
+							} else if (selected === q.correct) {
+								score++;
+								button.style.background = '#ccffcc';
+								button.style.borderColor = '#00cc00';
+								resultEl.innerHTML = '✅ Bonne réponse !';
+								resultEl.style.color = '#2d5016';
+							} else {
+								button.style.background = '#ffcccc';
+								button.style.borderColor = '#cc0000';
+								buttons[q.correct].style.background = '#ccffcc';
+								buttons[q.correct].style.borderColor = '#00cc00';
+								resultEl.innerHTML = '❌ Mauvaise réponse !';
+								resultEl.style.color = '#8B0000';
+							}
+            
+							// Désactiver tous les boutons
+							buttons.forEach(btn => btn.style.cursor = 'not-allowed');
+            
+							if (currentQuestion < questions.length - 1) {
+								nextBtn.style.display = 'inline-block';
+							} else {
+								showFinalScore();
+							}
+						}
+        
+						function showFinalScore() {
+							setTimeout(() => {
+								document.getElementById('quizContainer').style.display = 'none';
+								finalScoreEl.style.display = 'block';
+								scoreTextEl.textContent = `Tu as obtenu ${score} sur ${questions.length - 1} ! 🎄`;
+                
+								if (score === 4) {
+									scoreTextEl.innerHTML += '<br><br>🌟 Parfait ! Tu es un expert de Noël ! 🌟';
+								} else if (score >= 2) {
+									scoreTextEl.innerHTML += '<br><br>👍 Pas mal du tout !';
+								} else {
+									scoreTextEl.innerHTML += '<br><br>🎅 Dommage, bien tenté(e), peut-être une prochaine fois !';
+								}
+							}, 2000);
+						}
+        
+						nextBtn.onclick = () => {
+							currentQuestion++;
+							loadQuestion();
+						};
+        
+						loadQuestion();
+					}, 100);
+				} // ←❗ on referme bien le else if (day === 16)
+        
+				modal.style.display = 'block';
+			}
 		
 		// Fonction pour vérifier le message secret du jour 17
 				window.checkSecretMessage = function() {
@@ -1214,7 +1369,7 @@
 					if (e.key === 'Enter' && document.getElementById('decoder')) {
 						window.checkSecretMessage();
 					}
-				});
+				});	
 
         // Fermer la modal
         function closeModal() {
