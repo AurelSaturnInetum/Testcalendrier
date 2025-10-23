@@ -948,20 +948,39 @@
 				const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 	
 				function playBellNote(frequency) {
-					const oscillator = audioContext.createOscillator();
+					const oscillator1 = audioContext.createOscillator();
+					const oscillator2 = audioContext.createOscillator();
+					const oscillator3 = audioContext.createOscillator();
 					const gainNode = audioContext.createGain();
-		
-					oscillator.connect(gainNode);
+    
+					// Création d'harmoniques pour un son de cloche
+					oscillator1.connect(gainNode);
+					oscillator2.connect(gainNode);
+					oscillator3.connect(gainNode);
 					gainNode.connect(audioContext.destination);
-		
-					oscillator.type = 'sine';
-					oscillator.frequency.value = frequency;
-		
-					gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-					gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
-		
-					oscillator.start(audioContext.currentTime);
-					oscillator.stop(audioContext.currentTime + 1);
+    
+					// Fréquence fondamentale + harmoniques caractéristiques des cloches
+					oscillator1.frequency.value = frequency;
+					oscillator2.frequency.value = frequency * 2.4;  // Harmonique spécifique aux cloches
+					oscillator3.frequency.value = frequency * 3.8;  // Harmonique secondaire
+    
+					// Types d'ondes pour un son métallique
+					oscillator1.type = 'sine';
+					oscillator2.type = 'sine';
+					oscillator3.type = 'triangle';
+    
+					// Enveloppe sonore : attaque rapide, déclin lent (typique d'une cloche)
+					gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+					gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.01);  // Attaque rapide
+					gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);  // Déclin lent
+    
+					oscillator1.start(audioContext.currentTime);
+					oscillator2.start(audioContext.currentTime);
+					oscillator3.start(audioContext.currentTime);
+    
+					oscillator1.stop(audioContext.currentTime + 2);
+					oscillator2.stop(audioContext.currentTime + 2);
+					oscillator3.stop(audioContext.currentTime + 2);
 				}
 	
 				const notes = {
